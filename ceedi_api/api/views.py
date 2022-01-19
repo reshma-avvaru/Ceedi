@@ -12,22 +12,26 @@ db = firebaseInit()
 def apiOverview(request):
 
     apis ={
-        'authenticate': '/api/auth/<slug:id>',
-        'details': '/api/details/<slug:email>',
-        'product-lists':'/api/products/<slug:item>'
+        'auth-user-type': '/api/auth-user/',
+        'details': '/api/details/',
+        'product-lists':'/api/products/'
     }
     print(db)
     return Response(apis)
 
 
-@api_view(['GET'])
-def userAuthType(requests, email):
-
+@api_view(['POST', 'GET'])
+def userAuthType(requests):
+    if requests.method == 'GET':
+        return Response("auth user-type API v0.1")
+        
     users_ref = db.collection(u'users')
     docs = users_ref.stream()
-    for doc in docs:
-        if email == f'{doc.id}':
-            print()
-            return Response(f'{doc.to_dict()["userType"]}')
-    
+    if requests.method == 'POST':
+        email = requests.data.get('email')
+        for doc in docs:
+            if email == f'{doc.id}':
+                #print(doc.to_dict()["userType"])
+                return Response(doc.to_dict()["userType"])
+        
     #return Response("SUCCESS")
