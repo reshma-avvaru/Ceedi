@@ -1,7 +1,8 @@
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
-
+from rest_framework import exceptions
+import firebase_admin.auth as auth
 # Use a service account
 
 config = {
@@ -17,22 +18,50 @@ config = {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ndzii%40ceedi-c48e9.iam.gserviceaccount.com"
 }
 
+def firebaseAuth(token):
+      # cred = credentials.Certificate(config)
+      # firebase_admin.initialize_app(cred,name = fireauth)
+      #print( token)
+      if not token:
+        return None
+      try:
+        decoded_token = auth.verify_id_token(token)
+        uid = decoded_token["email"]
+        res = {
+          "status":"200",
+          "user": uid
+        }
+        print(res)
+        return(res)
+      except:
+        res ={
+          "status":"403",
+          
+        }
+        return(res)
+    
+
 
 def firebaseInit():
-    cred = credentials.Certificate(config)
-    firebase_admin.initialize_app(cred,{
-         'databaseURL': 'https://ceedi-c48e9-default-rtdb.firebaseio.com',
-    })
+      try:
+        cred = credentials.Certificate(config)
+        firebase_admin.initialize_app(cred,{
+                'databaseURL': 'https://ceedi-c48e9-default-rtdb.firebaseio.com',})
+        return True
+      except:
+        return False
 
-    print(cred)
-    db = firestore.client()
+    # for doc in docs: 
+    #print(f'{doc.id}:{doc.to_dict()}')
+
+def firestoreInit():
+      db = firestore.client()
+      return(db)
+  
+def addNewUser(userdata):
+      
     
-    users_ref = db.collection(u'users')
-    docs = users_ref.stream()
-    
-
-
-    # for doc in docs:
-    #     print(f'{doc.id}:{doc.to_dict()}')
-        
-    return(db)
+    status ={
+      "status":"success"
+    }
+    return(status)
