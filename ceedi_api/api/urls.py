@@ -12,5 +12,7 @@ urlpatterns = [
     
     path('',views.apiOverview, name = "api-overview"),
     # path('api/', include('rest_framework.urls', namespace='rest_framework'))
-    path('auth-user/', views.userAuthType, name = "user-auth" )
+    path('auth-user/', views.userAuthType, name = "user-auth" ),
+    path('fire-auth/', views.fireAuth, name = "fireauth"),
+    path('new-user/', views.addNewUser, name = "new-user"),
 ]
