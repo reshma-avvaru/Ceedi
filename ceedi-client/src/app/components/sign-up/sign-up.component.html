@@ -1,0 +1,56 @@
+<!-- <div class="displayTable">
+  <div class="displayTableCell">
+
+    <div class="authBlock">
+      <h3>Sign Up</h3>
+
+      <div class="formGroup">
+        <input type="email" class="formControl" placeholder="Email Address" #userEmail required>
+      </div>
+
+      <div class="formGroup">
+        <input type="password" class="formControl" placeholder="Password" #userPwd required>
+      </div>
+
+      <div class="formGroup">
+        <input type="button" class="btn btnPrimary" value="Sign Up" (click)="authService.SignUp(userEmail.value, userPwd.value)">
+      </div>
+    <div class="redirectToLogin">
+      <span>Already have an account? <span class="redirect" routerLink="/sign-in">Log In</span></span>
+    </div>
+  </div>
+
+</div> -->
+<div class="container">
+<div class="signup-form">
+    <form>
+		<h2>Register</h2>
+		<p class="hint-text">Create your account</p>
+       <!-- <div class="form-group">
+			<div class="row">
+				<div class="col"><input type="text" class="form-control" name="first_name" placeholder="First Name" required="required"></div>
+				<div class="col"><input type="text" class="form-control" name="last_name" placeholder="Last Name" required="required"></div>
+			</div> 
+        </div>
+                <div class="form-group">
+			<label class="form-check-label"><input type="checkbox" required="required"> I accept the <a href="#">Terms of Use</a> &amp; <a href="#">Privacy Policy</a></label>
+		</div>
+    -->
+        <div class="form-group">
+        	<input type="email" class="form-control" name="email" placeholder="Email" required="required" #userEmail required>
+        </div>
+		<div class="form-group">
+            <input type="password" class="form-control" name="password" placeholder="Password" required="required" #userPwd  required>
+        </div>
+      
+		<div class="form-group">
+            <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
+        </div>     
+
+		<div class="form-group">
+            <button type="submit" (click)="authService.SignUp(userEmail.value, userPwd.value)" class="btn btn-success btn-lg btn-block">Sign Up</button>
+        </div>
+    </form>
+	<div class="text-center">Already have an account? <a routerLink="/sign-in">Sign in</a></div>
+</div>
+</div>
