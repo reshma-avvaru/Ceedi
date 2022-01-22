@@ -42,6 +42,7 @@ export class AuthService {
     console.log("sign in start")
     return this.afAuth.signInWithEmailAndPassword(email, password)
       .then((result) => {
+        
         console.log("result",result)
         this.ngZone.run(() => {
           console.log("nav")
@@ -57,6 +58,7 @@ export class AuthService {
   SignUp(email:any, password:any) {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((result) => {
+        console.log(result)
         /* Call the SendVerificaitonMail() function when new user sign
         up and returns promise */
         this.SendVerificationMail();

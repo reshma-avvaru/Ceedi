@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .firebase import firebaseInit,firebaseAuth
+from .firebase import firebaseInit,firebaseAuth, firestoreInit
 # Create your views here.
 
 
@@ -33,7 +33,7 @@ def fireAuth(requests):
         result = firebaseAuth(token)
         stat = result['status']
         email = result['user']        
-        if stat == '203':
+        if stat == '200':
             return Response(email)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
@@ -46,14 +46,14 @@ def userAuthType(requests):
     if requests.method == 'GET':
         return Response("auth user-type API v0.1")
             
-    users_ref = db.collection(u'users')
-    docs = users_ref.stream()
     if requests.method == 'POST':
         token = requests.data.get('token')
+        print(token)
         email = requests.data.get('email')
         result = firebaseAuth(token)
         stat = result['status']      
-        if stat == '203':
+        print(stat)
+        if stat == '200':
                 db = firestoreInit()
                 users_ref = db.collection(u'users')
                 docs = users_ref.stream()
@@ -71,25 +71,24 @@ def userAuthType(requests):
     
 @api_view(['POST', 'GET'])
 def addNewUser(requests):
-    if request.method == 'GET':
+    if requests.method == 'GET':
         return Response("add new user to database")
         
-    if request.method == 'POST':    
-        user = request.data.get()
-        token = requests.data.get('token')
+    if requests.method == 'POST': 
+           
+        docid = requests.data.get('email')
         userType = requests.data.get('userType')
-        
+        token = requests.data.get('token')
         result = firebaseAuth(token)
         stat = result['status']       
         email = result['user']
-        if stat == '203':
+        
+        if stat == '200' and email == docid:
             db = firestoreInit()
             db.collection(u'users').document(email).set({
                 'userType': userType
             }
             )
-            
-            
             return Response("success",status = status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
