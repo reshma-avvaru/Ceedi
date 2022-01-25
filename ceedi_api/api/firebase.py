@@ -18,6 +18,7 @@ config = {
   "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-ndzii%40ceedi-c48e9.iam.gserviceaccount.com"
 }
 
+
 def firebaseAuth(token):
       # cred = credentials.Certificate(config)
       # firebase_admin.initialize_app(cred,name = fireauth)
@@ -31,7 +32,7 @@ def firebaseAuth(token):
           "status":"200",
           "user": uid
         }
-        print(res)
+       
         return(res)
       except:
         res ={
@@ -55,13 +56,14 @@ def firebaseInit():
     #print(f'{doc.id}:{doc.to_dict()}')
 
 def firestoreInit():
+
       db = firestore.client()
       return(db)
-  
-def addNewUser(userdata):
+
+def relatimedbInit():
+      from firebase_admin import db
       
-    
-    status ={
-      "status":"success"
-    }
-    return(status)
+      products = db.reference('/productList/')
+      return (products)
+
+

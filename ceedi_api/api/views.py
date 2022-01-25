@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .firebase import firebaseInit,firebaseAuth, firestoreInit
+from .firebase import  firebaseInit, firebaseAuth, firestoreInit, relatimedbInit
 # Create your views here.
 
 
@@ -13,11 +13,35 @@ firebase = firebaseInit()
 def apiOverview(request):
 
     apis ={
-        'firebase-auth':'api/fire-auth',
-        'auth-user-type': '/api/auth-user/',
-        'add-new-user':'/api/new-user',
-        'details': '/api/details/',
-        'product-lists':'/api/products/'
+        'firebase-auth':
+            {
+                'URL': '/api/fire-auth',
+                'POST - {token}': 'returns verify token '
+            },
+        'auth-user-type': 
+            {
+                'URL': ' /api/auth-user/',
+                'POST - {token}': 'returns user-type'
+            },
+        'add-new-user':  
+            {
+                'URL': ' /api/new-user',
+                'POST - {token,email,userType}': 'adds new user'
+            },
+        'product-lists':
+            {
+                'URL': '/api/products/list/<token>',
+                'GET': 'get list of products',
+                'POST - {item:{itemDetails}}': 'add new products'
+            },
+           
+        'product-update':
+            {
+                'URL': 'products/<item>/<token>',
+                'GET ': 'get updated item details',
+                'PUT - {fieldname,fieldvalue}': 'updates item field values',
+                'DELETE': 'delete item from product'
+            },
     }
     print(firebase)
     return Response(apis,status = status.HTTP_201_CREATED)
@@ -28,7 +52,7 @@ def fireAuth(requests):
     if requests.method == 'GET':
         return Response("firebase auth for user")
         
-    if requests.method == 'POST':    
+    elif requests.method == 'POST':    
         token = requests.data.get('token')
         result = firebaseAuth(token)
         stat = result['status']
@@ -37,6 +61,8 @@ def fireAuth(requests):
             return Response(email)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
+    else:
+        return Response(status =HTTP_400_BAD_REQUEST)
 
 
 
@@ -46,7 +72,7 @@ def userAuthType(requests):
     if requests.method == 'GET':
         return Response("auth user-type API v0.1")
             
-    if requests.method == 'POST':
+    elif requests.method == 'POST':
         token = requests.data.get('token')
         print(token)
         email = requests.data.get('email')
@@ -64,7 +90,8 @@ def userAuthType(requests):
             
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
-        
+    else:
+        return Response(status =HTTP_400_BAD_REQUEST)
      
         
     #return Response("SUCCESS")
@@ -74,7 +101,7 @@ def addNewUser(requests):
     if requests.method == 'GET':
         return Response("add new user to database")
         
-    if requests.method == 'POST': 
+    elif requests.method == 'POST': 
            
         docid = requests.data.get('email')
         userType = requests.data.get('userType')
@@ -82,7 +109,6 @@ def addNewUser(requests):
         result = firebaseAuth(token)
         stat = result['status']       
         email = result['user']
-        
         if stat == '200' and email == docid:
             db = firestoreInit()
             db.collection(u'users').document(email).set({
@@ -92,3 +118,81 @@ def addNewUser(requests):
             return Response("success",status = status.HTTP_201_CREATED)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
+    else:
+        return Response(status =HTTP_400_BAD_REQUEST)
+        
+
+@api_view(['GET', 'POST'])
+def getProductList(requests, token):
+    if requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+           
+            prod = relatimedbInit()
+            return Response(prod.get())
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        
+    #ADD NEW PRODUCT
+    elif requests.method == 'POST':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            item = requests.data
+            prod = relatimedbInit()
+            for key in item.keys():
+                item = key
+                data = requests.data.get(item)
+                print(data)
+                prod.child(item).set(data)
+            return Response(prod.get())
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST)    
+    
+      
+@api_view(['DELETE', 'PUT', 'GET'])
+def updateProduct(requests, item , token):
+    
+    #DELETE PRODUCT
+    if requests.method == 'DELETE':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            prod = relatimedbInit()
+            prod.child(item).delete()
+            
+            return Response(prod.get())
+
+        return Response("d")
+    
+    #GET PRODUCT
+    elif requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            prod = relatimedbInit()
+            return Response(prod.child(item).get())
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        
+    #UPDATE FIELDS               
+    elif requests.method == 'PUT':
+        field = requests.data.get('fieldname')
+        value = requests.data.get('fieldvalue')
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            des = 'description'
+            prod = relatimedbInit()
+            prod.child(item).update({
+                field: value
+            })
+            return Response(prod.child(item).get())
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+        
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST )
