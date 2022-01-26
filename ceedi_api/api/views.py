@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .firebase import  firebaseInit, firebaseAuth, firestoreInit, relatimedbInit
 # Create your views here.
-
-
+from google.cloud import firestore
+import json
 firebase = firebaseInit()
 
 @api_view(['GET'])
@@ -74,19 +74,21 @@ def userAuthType(requests):
             
     elif requests.method == 'POST':
         token = requests.data.get('token')
-        print(token)
         email = requests.data.get('email')
         result = firebaseAuth(token)
         stat = result['status']      
-        print(stat)
+
         if stat == '200':
                 db = firestoreInit()
-                users_ref = db.collection(u'users')
-                docs = users_ref.stream()
-                for doc in docs:
+                users_ref = db.collection('users')
+                docs = users_ref.get()
+          
+                for doc in (doc for doc in docs if doc.id == email):
                     if email == f'{doc.id}':
-                    #print(doc.to_dict()["userType"])
                         return Response(doc.to_dict()["userType"])
+                    else:
+                        return Response(status = status.HTTP_404_NOT_FOUND)
+                return Response()
             
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
@@ -196,3 +198,29 @@ def updateProduct(requests, item , token):
         
     else:
         return Response(status = status.HTTP_400_BAD_REQUEST )
+    
+
+
+@api_view(['GET','POST'])
+def ridersList(requests, token):
+    if requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            
+            return Response()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+    elif requests.method == 'POST':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            return Response()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+        return Response()
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST )
+        
