@@ -86,10 +86,7 @@ def userAuthType(requests):
                 for doc in (doc for doc in docs if doc.id == email):
                     if email == f'{doc.id}':
                         return Response(doc.to_dict()["userType"])
-                    else:
-                        return Response(status = status.HTTP_404_NOT_FOUND)
-                return Response()
-            
+                return Response(status = status.HTTP_404_NOT_FOUND)
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
     else:
