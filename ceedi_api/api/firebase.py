@@ -58,6 +58,11 @@ def firebaseInit():
 def firestoreInit():
 
       db = firestore.client()
+      users_ref = db.collection('users')
+      docs = users_ref.get()
+      riders_ref = db.collection('riders')
+      docs = riders_ref.get() 
+      
       return(db)
 
 def relatimedbInit():
