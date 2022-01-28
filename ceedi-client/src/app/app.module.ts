@@ -17,6 +17,8 @@ import { VerifyEmailComponent } from './components/verify-email/verify-email.com
 import { AuthService } from "./shared/services/auth.service";
 
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GridModule } from '@syncfusion/ej2-angular-grids';
 
 @NgModule({
   declarations: [
@@ -34,6 +36,8 @@ import { HttpClientModule } from '@angular/common/http';
     AngularFireAuthModule,
     AngularFirestoreModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    GridModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

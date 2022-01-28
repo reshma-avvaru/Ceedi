@@ -60,6 +60,52 @@ export class AuthService {
       })
     })
   }
+ async addnewproduct(image:any,name:string,description:string,price:any,quantity:any){
+   console.log(image)
+    var u=await this.afAuth.currentUser
+    var token= await u?.getIdToken()
+    var list=await this.http.post<any>(this.url+`/api/products/list/${token}`,{name:{
+      image:image,
+      title:name,
+      description:description,
+      price:price,
+      quantity:quantity
+    }}).toPromise()
+    console.log(list)
+  }
+  async getAllProducts(){
+    // this.afAuth.currentUser.then(u=>{
+    //   u?.getIdToken().then(token=>{
+    //     return this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    //   })
+    // })
+    var u=await this.afAuth.currentUser
+    var token= await u?.getIdToken()
+    var list=await this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    return list
+  }
+  async getAllOrders(){
+    // this.afAuth.currentUser.then(u=>{
+    //   u?.getIdToken().then(token=>{
+    //     return this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    //   })
+    // })
+    var u=await this.afAuth.currentUser
+    var token= await u?.getIdToken()
+    var list=await this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    return list
+  }
+  async editProduct(name:any,field:any,value:any){
+    // this.afAuth.currentUser.then(u=>{
+    //   u?.getIdToken().then(token=>{
+    //     return this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    //   })
+    // })
+    var u=await this.afAuth.currentUser
+    var token= await u?.getIdToken()
+    var list=await this.http.put<any>(this.url+`/api/products/${name}/${token}`,{fieldname:field,fieldvalue:value}).toPromise()
+    return list
+  }
   // Sign in with email/password
   SignIn(email:any, password:any) {
     console.log("sign in start")
