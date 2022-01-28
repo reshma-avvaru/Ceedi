@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
+from .serializer import my_dictionary 
 from .firebase import  firebaseInit, firebaseAuth, firestoreInit, relatimedbInit
 # Create your views here.
 from google.cloud import firestore
@@ -87,6 +88,7 @@ def userAuthType(requests):
                     if email == f'{doc.id}':
                         return Response(doc.to_dict()["userType"])
                 return Response(status = status.HTTP_404_NOT_FOUND)
+            
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
     else:
@@ -198,14 +200,21 @@ def updateProduct(requests, item , token):
     
 
 
+
 @api_view(['GET','POST'])
 def ridersList(requests, token):
     if requests.method == 'GET':
         result = firebaseAuth(token)
         stat = result['status']
         if stat == '200':
-            
-            return Response()
+            db = firestoreInit()
+            users_ref = db.collection('riders')
+            docs = users_ref.get()
+            rider_obj = my_dictionary() 
+            for doc in docs:
+                rider_obj.add(doc.id, doc.to_dict())
+                
+            return Response(rider_obj)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
