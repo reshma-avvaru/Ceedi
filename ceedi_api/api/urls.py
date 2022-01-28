@@ -16,5 +16,6 @@ urlpatterns = [
     path('fire-auth/', views.fireAuth, name = "fireauth"),
     path('new-user/', views.addNewUser, name = "new-user"),
     path('products/list/<str:token>', views.getProductList , name = "product-list"),
-    path('products/<str:item>/<str:token>', views.updateProduct, name= "update-product")
+    path('products/<str:item>/<str:token>', views.updateProduct, name= "update-product"),
+    path('riders/list/<str:token>', views.ridersList, name = "riders-lisr"),
 ]
