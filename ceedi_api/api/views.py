@@ -204,7 +204,35 @@ def updateProduct(requests, item , token):
         return Response(status = status.HTTP_400_BAD_REQUEST )
     
 
+@api_view(['GET','POST'])
+def ordersList(requests, token):
+    if requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            db = firestoreInit()
+            users_ref = db.collection('orders')
+            docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
+            rider_obj = my_dictionary() 
+            for doc in docs:
+                rider_obj.add(doc.id, doc.to_dict())
+                
+            return Response(rider_obj)
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
 
+    elif requests.method == 'POST':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            return Response()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+        return Response()
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST )
+        
 
 @api_view(['GET','POST'])
 def ridersList(requests, token):
