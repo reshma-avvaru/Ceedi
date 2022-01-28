@@ -1,3 +1,4 @@
+from email import message
 from django.shortcuts import render
 from django.http import JsonResponse
 from rest_framework.decorators import api_view
@@ -62,19 +63,19 @@ def fireAuth(requests):
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        return Response(status =HTTP_400_BAD_REQUEST)
+        return Response(status =status.HTTP_400_BAD_REQUEST)
 
 
 
 
 @api_view(['POST', 'GET'])
-def userAuthType(requests):    
-    if requests.method == 'GET':
+def userAuthType(requests):   
+    if requests.method == 'GET':        
         return Response("auth user-type API v0.1")
             
     elif requests.method == 'POST':
+        print('post request')
         token = requests.data.get('token')
-        print(token)
         email = requests.data.get('email')
         result = firebaseAuth(token)
         stat = result['status']      
@@ -86,23 +87,25 @@ def userAuthType(requests):
                 for doc in docs:
                     if email == f'{doc.id}':
                     #print(doc.to_dict()["userType"])
+                        print(doc.to_dict()["userType"])
                         return Response(doc.to_dict()["userType"])
             
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        return Response(status =HTTP_400_BAD_REQUEST)
+        return Response(status =status.HTTP_400_BAD_REQUEST)
      
         
     #return Response("SUCCESS")
     
 @api_view(['POST', 'GET'])
 def addNewUser(requests):
+    print("function")
     if requests.method == 'GET':
         return Response("add new user to database")
         
     elif requests.method == 'POST': 
-           
+        print("POST")
         docid = requests.data.get('email')
         userType = requests.data.get('userType')
         token = requests.data.get('token')
@@ -119,7 +122,7 @@ def addNewUser(requests):
         else:
             return Response(status=status.HTTP_403_FORBIDDEN)
     else:
-        return Response(status =HTTP_400_BAD_REQUEST)
+        return Response(status =status.HTTP_400_BAD_REQUEST)
         
 
 @api_view(['GET', 'POST'])
