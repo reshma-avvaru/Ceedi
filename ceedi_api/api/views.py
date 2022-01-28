@@ -8,6 +8,8 @@ from .firebase import  firebaseInit, firebaseAuth, firestoreInit, relatimedbInit
 # Create your views here.
 from google.cloud import firestore
 import json
+
+
 firebase = firebaseInit()
 
 @api_view(['GET'])
