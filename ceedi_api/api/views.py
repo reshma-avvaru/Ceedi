@@ -46,6 +46,31 @@ def apiOverview(request):
                 'PUT - {fieldname,fieldvalue}': 'updates item field values',
                 'DELETE': 'delete item from product'
             },
+        'riders-list':
+            {
+                'URL':'/api/riders/list/<token>',
+                'GET':'get list of all riders',
+                'POST': ''
+            },
+        'orders-list':
+            {
+                'URL':'/api/orders/list/<token>',
+                'GET':'get list of all orders',
+                'POST': '',
+            },
+        'riders-history':
+            {
+                'URL':'riders/history/<rid>/<token>',
+                'GET':'get delivery history of riders',
+                'POST':'',
+            },
+        'riders-reviews':
+            {
+                'URL':'riders/reviews/<rid>/<token>',
+                'GET':'get reviews of riders',
+                'POST':'',
+            }
+        
     }
     print(firebase)
     return Response(apis,status = status.HTTP_201_CREATED)
@@ -204,22 +229,20 @@ def updateProduct(requests, item , token):
         return Response(status = status.HTTP_400_BAD_REQUEST )
     
 
-
-
 @api_view(['GET','POST'])
-def ridersList(requests, token):
+def ordersList(requests, token):
     if requests.method == 'GET':
         result = firebaseAuth(token)
         stat = result['status']
         if stat == '200':
             db = firestoreInit()
-            users_ref = db.collection('riders')
-            docs = users_ref.get()
-            rider_obj = my_dictionary() 
+            users_ref = db.collection('orders')
+            docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
+            json_obj = my_dictionary() 
             for doc in docs:
-                rider_obj.add(doc.id, doc.to_dict())
+                json_obj.add(doc.id, doc.to_dict())
                 
-            return Response(rider_obj)
+            return Response(json_obj)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
@@ -235,3 +258,95 @@ def ridersList(requests, token):
     else:
         return Response(status = status.HTTP_400_BAD_REQUEST )
         
+
+@api_view(['GET','POST'])
+def ridersList(requests, token):
+    if requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            db = firestoreInit()
+            users_ref = db.collection('riders')
+            docs = users_ref.get()
+            json_obj = my_dictionary() 
+            for doc in docs:
+                json_obj.add(doc.id, doc.to_dict())
+                
+            return Response(json_obj)
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+    elif requests.method == 'POST':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            return Response()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+        return Response()
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST )
+        
+
+@api_view(['GET','POST'])
+def ridersHistory(requests, rid, token):
+    if requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+
+        if stat == '200':
+            db = firestoreInit()
+            users_ref = db.collection('riders').document(rid).collection('deliveryHistory')
+            docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
+            json_obj = my_dictionary()            
+            for doc in docs:
+                json_obj.add(doc.id, doc.to_dict())  
+            return Response(json_obj)
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+    elif requests.method == 'POST':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            return Response()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+        return Response()
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST )
+        
+
+
+@api_view(['GET','POST'])
+def ridersReviews(requests, rid, token):
+    if requests.method == 'GET':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            db = firestoreInit()
+            users_ref = db.collection('riders').document(rid).collection('review')
+            docs = users_ref.get()
+            json_obj = my_dictionary()            
+            for doc in docs:
+                json_obj.add(doc.id, doc.to_dict())  
+            return Response(json_obj)
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+    elif requests.method == 'POST':
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            return Response()
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+
+        return Response()
+    else:
+        return Response(status = status.HTTP_400_BAD_REQUEST )
+        
+
+
