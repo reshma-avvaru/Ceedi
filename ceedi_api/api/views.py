@@ -238,11 +238,11 @@ def ordersList(requests, token):
             db = firestoreInit()
             users_ref = db.collection('orders')
             docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
-            rider_obj = my_dictionary() 
+            json_obj = my_dictionary() 
             for doc in docs:
-                rider_obj.add(doc.id, doc.to_dict())
+                json_obj.add(doc.id, doc.to_dict())
                 
-            return Response(rider_obj)
+            return Response(json_obj)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
@@ -268,11 +268,11 @@ def ridersList(requests, token):
             db = firestoreInit()
             users_ref = db.collection('riders')
             docs = users_ref.get()
-            rider_obj = my_dictionary() 
+            json_obj = my_dictionary() 
             for doc in docs:
-                rider_obj.add(doc.id, doc.to_dict())
+                json_obj.add(doc.id, doc.to_dict())
                 
-            return Response(rider_obj)
+            return Response(json_obj)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
@@ -299,10 +299,10 @@ def ridersHistory(requests, rid, token):
             db = firestoreInit()
             users_ref = db.collection('riders').document(rid).collection('deliveryHistory')
             docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
-            rider_obj = my_dictionary()            
+            json_obj = my_dictionary()            
             for doc in docs:
-                rider_obj.add(doc.id, doc.to_dict())  
-            return Response(rider_obj)
+                json_obj.add(doc.id, doc.to_dict())  
+            return Response(json_obj)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
@@ -329,10 +329,10 @@ def ridersReviews(requests, rid, token):
             db = firestoreInit()
             users_ref = db.collection('riders').document(rid).collection('review')
             docs = users_ref.get()
-            rider_obj = my_dictionary()            
+            json_obj = my_dictionary()            
             for doc in docs:
-                rider_obj.add(doc.id, doc.to_dict())  
-            return Response(rider_obj)
+                json_obj.add(doc.id, doc.to_dict())  
+            return Response(json_obj)
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 

@@ -1,10 +1,25 @@
 from django.contrib.auth.models import User, Group
 from rest_framework import serializers
+from firebase_admin import firestore
 
 class my_dictionary(dict): 
+    i =0
     # __init__ function 
     def __init__(self): 
         self = dict()   
     # Function to add key:value 
-    def add(self, key, value): 
-        self[key] = value 
+    def add(self, keyid, value): 
+        for key in value:
+            if isinstance(value[key],firestore.GeoPoint):
+                
+                lat = value['location'].latitude
+                lon = value['location'].longitude
+                value[key] = {
+                'latitude':lat, 
+                'longitude':lon,
+                }    
+           
+            
+        self[keyid] = value 
+        
+    
