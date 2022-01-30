@@ -15,7 +15,7 @@ class my_dictionary(dict):
                 lat = value['location'].latitude
                 lon = value['location'].longitude
                 value[key] = {
-                'latitude':lat,
+                'latitude':lat, 
                 'longitude':lon,
                 }    
            
