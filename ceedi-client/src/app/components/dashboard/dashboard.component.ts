@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
     const user=auth.currentUser;
     console.log("user",user)
     this.token=await user?.getIdToken();
+    console.log(this.token)
   }
   setdata(e:any){
    
