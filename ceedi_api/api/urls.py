@@ -19,4 +19,6 @@ urlpatterns = [
     path('products/<str:item>/<str:token>', views.updateProduct, name= "update-product"),
     path('riders/list/<str:token>', views.ridersList, name = "riders-list"),
     path('orders/list/<str:token>', views.ordersList, name = "orders-list"),
+    path('riders/history/<str:rid>/<str:token>', views.ridersHistory, name = "rider-history"),
+    path('riders/reviews/<str:rid>/<str:token>', views.ridersReviews, name = "rider-review"),
 ]
