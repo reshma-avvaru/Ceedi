@@ -1,0 +1,93 @@
+<div>
+  <nav class="navbar navbar-expand-lg navbar-light nav-color p-3">
+    <a class="navbar-brand" href="#">
+    <img src="/assets/Ceedi.png" height="50" alt="">
+  </a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link"(click)="getAllRiders()">Inspect Riders</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)="authService.SignOut()">
+              <i class="fas fa-sign-out-alt"></i>Log out
+            </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<div [hidden]="hideWelcome">
+<div class="conatiner">
+<h1>Welcome to Ceedi Panel</h1>
+</div>
+ 
+</div>
+<div [hidden]="hideTable" class="container">
+  <table class="table bg-light ">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">Rider History</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of riders">
+        <td>{{r.rider}}</td>
+        <td>{{r.prop.riderStatus}}</td>
+        <td><button id="{{r.rider}}" (click)="open($event,mymodal)" class="btn btn-sm">view</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+</div>
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Rider delivery history</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">x</button>
+    </div>
+    <div  class="modal-body">
+    <p *ngIf="nodelivery">No previous delivery history</p>
+    <table *ngIf="!nodelivery" class="table bg-light ">
+    <thead>
+      <tr>
+        <th scope="col">Client</th>
+        <th scope="col">Date</th>
+        <th scope="col">Location</th>
+        <th scope="col">Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of riderHistory">
+        <td>{{r.clientEmail}}</td>
+        <td>{{r.date}}</td>
+        <td>{{r.location}}</td>
+        <td>{{r.outcome}}</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+    <!--<form>
+      <div>
+      <h2>Edit</h2>
+      <div class="form-group">
+        <input type="image" class="form-control" name="image" [value]="toedit.image" #eimage required>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" name="title"  required="required" [value]="toedit.title" #etitle required>
+      </div>
+      <div class="form-group">
+        <input type="text" class="form-control" name="description" required="required" [value]="toedit.description" #edesc required>
+      </div>
+      <div class="form-group">
+        <input type="number" class="form-control" name="price" required="required" [value]="toedit.price" #eprice required>
+      </div>
+      <div class="form-group">
+        <input type="number" class="form-control" name="quantity" required="required" [value]="toedit.quantity" #equantity required>
+      </div>
+      <div class="form-group">
+        <button type="button" (click)="onSubmit(etitle.value,edesc.value,eprice.value,equantity.value)"  class="btn btn-success btn-lg btn-block">Add</button>
+      </div>
+      </div>
+      </form>-->
+</ng-template>

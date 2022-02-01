@@ -19,6 +19,9 @@ import { AuthService } from "./shared/services/auth.service";
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
+import { AdminComponent } from './admin/admin.component';
+  
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,8 @@ import { GridModule } from '@syncfusion/ej2-angular-grids';
     SignInComponent,
     SignUpComponent,
     ForgotPasswordComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -37,7 +41,8 @@ import { GridModule } from '@syncfusion/ej2-angular-grids';
     AngularFirestoreModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    GridModule
+    GridModule,
+    NgbModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

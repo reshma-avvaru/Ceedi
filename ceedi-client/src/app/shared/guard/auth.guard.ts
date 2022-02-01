@@ -24,7 +24,9 @@ export class AuthGuard implements CanActivate {
     //   this.router.navigate(['sign-in'])
     // }
     if(localStorage.getItem('userType')==undefined)this.router.navigate(['sign-in'])
+    else if(localStorage.getItem('userType')=="ADMIN")this.router.navigate(['admin'])
     return true;
+    
   }
   
 }
