@@ -378,4 +378,3 @@ def confirmRider(requests, token):
         return Response()
     else:
         return Response()
-        
