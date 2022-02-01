@@ -377,5 +377,4 @@ def confirmRider(requests, token):
         docs = delivery_ref.document(order_id).set(order_ref)
         return Response()
     else:
-        return Response()
-        
+      return Response()
