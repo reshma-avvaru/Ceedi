@@ -290,8 +290,9 @@ def ridersList(requests, token):
         
 
 @api_view(['GET','POST'])
-def ridersHistory(requests, rid, token):
-    if requests.method == 'GET':
+def ridersHistory(requests, token):
+    if requests.method == 'POST':
+        rid = requests.data.get('rid')
         result = firebaseAuth(token)
         stat = result['status']
 
@@ -306,7 +307,7 @@ def ridersHistory(requests, rid, token):
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
-    elif requests.method == 'POST':
+    elif requests.method == 'GET':
         result = firebaseAuth(token)
         stat = result['status']
         if stat == '200':

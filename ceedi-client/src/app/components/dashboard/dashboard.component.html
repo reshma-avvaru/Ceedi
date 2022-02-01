@@ -23,30 +23,35 @@
   </div>
 </div>-->
 <div class="">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light p-2">
-    <a class="navbar-brand" href="#">Ceedi</a>
+  <nav class="navbar navbar-expand-lg navbar-light nav-color p-3">
+    <a class="navbar-brand">Ceedi</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
-          <a class="nav-link" href="">Product</a>
+          <a (click)="productForm()" class="nav-link">New Product</a>
         </li>
         <li class="nav-item active">
           <a class="nav-link" (click)="getAllProducts()">All Products</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Orders</a>
+          <a class="nav-link" (click)="getAllOrders()">Orders</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Riders</a>
+          <a class="nav-link"(click)="getAllRiders()">Riders</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" (click)="authService.SignOut()">
+              <i class="fas fa-sign-out-alt"></i>Log out
+            </a>
         </li>
       </ul>
     </div>
   </nav>
 <div class="container">
-  <div class="signup-form">
+  <div [hidden]="hideForm" class="signup-form">
       <form>
       <div>
       <h2>New Item</h2>
@@ -66,13 +71,12 @@
         <input type="number" class="form-control" name="quantity" placeholder="quantity" required="required" #quantity required>
       </div>
       <div class="form-group">
-        <button type="button" (click)="this.authService.addnewproduct(image.value,title.value,desc.value,price.value,quantity.value)"  class="btn btn-success btn-lg btn-block">Add</button>
+        <button type="button" (click)="this.authService.addnewproduct(image.value,title.value,desc.value,price.value,quantity.value)"  class="btn btn-lg btn-block">Add</button>
       </div>
       </div>
       </form>
   </div>
-  <button (click)="getAllProducts()">products</button>
-  <table class="table bg-light ">
+  <table [hidden]="hideProducts" class="table bg-light ">
     <thead>
       <tr>
         <th scope="col">Image</th>
@@ -88,35 +92,95 @@
         <td>{{p.title}}</td>
         <td>{{p.price}}</td>
         <td>{{p.quantity}}</td>
-        <td><button  id="{{p.title}}" (click)="setdata($event)">Edit</button></td>
+        <td><button class="btn btn-sm"  id="{{p.title}}" (click)="open($event,mymodal)">Edit</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <table [hidden]="hideOrders" class="table bg-light ">
+    <thead>
+      <tr>
+        <th scope="col">Date</th>
+        <th scope="col">Client</th>
+        <th scope="col">Status</th>
+        <th scope="col">Payment</th>
+        <th scope="col">Total</th>
+        <th scope="col">Products</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let o of orders">
+        <td>{{o.date}}</td>
+        <td>{{o.clientEmail}}</td>
+        <td>{{o.outcome}}</td>
+        <td>{{o.payment}}</td>
+        <td>{{o.total}}</td>
+        <td>
+        <ol>
+        <li *ngFor="let p of o.products" >
+        <ul>
+        <li>Name: {{p.title}}</li>
+        <li>No. {{p.quantity}}</li>
+        <li>Price {{p.price}}</li>
+        </ul>
+        
+        </li>
+        </ol>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table [hidden]="hideRiders" class="table bg-light ">
+    <thead>
+      <tr>
+        <th scope="col">Name</th>
+        <th scope="col">Status</th>
+        <th scope="col">Distance</th>
+        <th scope="col">Distance</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let r of riders">
+        <td>{{r.rider}}</td>
+        <td>{{r.prop.riderStatus}}</td>
+        <td>{{r.prop.distance}} <span *ngIf="r.prop.distance!='None'">km</span></td>
+        <td>{{r.prop.time}} <span *ngIf="r.prop.time!='None'">Min</span></td>
       </tr>
     </tbody>
   </table>
 </div>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
+<!--<button class="btn btn-primary" (click)="authService.distance()">id</button>-->
+<ng-template #mymodal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Edit</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">x</button>
     </div>
-  </div>
-</div>
-<button class="btn btn-primary" (click)="idtoken()">id</button>
-</div>
+    <div class="modal-body">
+    <form>
+      <div>
+      <!--<div class="form-group">
+        <input type="image" class="form-control" name="image" [value]="toedit.image" #eimage required>
+      </div>-->
+      <div class="form-group">
+        <label>Title</label>
+        <input type="text" class="form-control" name="title"  required="required" [value]="toedit.title" #etitle required>
+      </div>
+      <div class="form-group">
+      <label>Description</label>
+        <input type="text" class="form-control" name="description" required="required" [value]="toedit.description" #edesc required>
+      </div>
+      <div class="form-group">
+      <label>Price</label>
+        <input type="number" class="form-control" name="price" required="required" [value]="toedit.price" #eprice required>
+      </div>
+      <div class="form-group">
+      <label>Quantity</label>
+        <input type="number" class="form-control" name="quantity" required="required" [value]="toedit.quantity" #equantity required>
+      </div>
+      <div class="form-group">
+        <button type="button" (click)="onSubmit(etitle.value,edesc.value,eprice.value,equantity.value)"  class="btn btn-lg btn-block">Save Changes</button>
+      </div>
+      </div>
+      </form>
+      </div>
+</ng-template>

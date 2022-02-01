@@ -1,4 +1,11 @@
-<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light nav-color p-3">
+    <a class="navbar-brand" href="#">
+    <img src="/assets/Ceedi.png" height="50" alt="">
+  </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
 <div class="signup-form">
     <form>
 		<h2>Register</h2>
@@ -14,9 +21,8 @@
             <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required">
         </div>     
 		<div class="form-group">
-            <button type="button" (click)="authService.SignUp(userEmail.value, userPwd.value,'CLIENT')" class="btn btn-success btn-lg btn-block">Sign Up</button>
+            <button type="button" (click)="authService.SignUp(userEmail.value, userPwd.value,'CLIENT')" class="btn btn-lg btn-block">Sign Up</button>
         </div>
     </form>
 	<div class="text-center">Already have an account? <a routerLink="/sign-in">Sign in</a></div>
-</div>
 </div>

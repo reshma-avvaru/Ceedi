@@ -6,10 +6,30 @@
     height: 200px;
     width:200px;
 }
+.nav-color{
+	background-color: #FF7F3F !important;
+	color: #fff !important;
+}
+.nav-item{
+	color: #fff !important;
+}
+.nav-link {
+	font-size: 22px;
+	color: #fff !important;
+}
+.navbar-brand{
+	font-size: 30px;
+	font-style: bold;
+	color: #fff !important;
+}
 .container{
 	color: #fff;
-	background: #63738a;
+	//background:#FF7F34;
 	font-family: 'Roboto', sans-serif;
+}
+.btn{
+	background-color: #FF7F3F;
+	color: #fff;
 }
 .forgotPassword{
     cursor: pointer;
