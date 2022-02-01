@@ -9,9 +9,12 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
 import { AuthGuard } from "./shared/guard/auth.guard";
 import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+import { AdminComponent } from './admin/admin.component';
+import { AdminGuard } from './shared/guard/admin.guard';
 
 const routes: Routes = [
   //{ path: '', redirectTo: '/sign-in', pathMatch: 'full'},
+  {path:"admin",component:AdminComponent,canActivate:[AdminGuard]},
   { path: 'sign-in', component: SignInComponent},
   { path: 'register-user', component: SignUpComponent},
   { path: '', component: DashboardComponent, canActivate: [AuthGuard] },

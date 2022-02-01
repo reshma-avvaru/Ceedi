@@ -1,4 +1,11 @@
-<div class="container">
+  <nav class="navbar navbar-expand-lg navbar-light nav-color p-3">
+    <a class="navbar-brand" href="#">
+    <img src="/assets/Ceedi.png" height="50" alt="">
+  </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
 <div class="signup-form">
     <form>
     <div>
@@ -13,10 +20,9 @@
       <span routerLink="/forgot-password">Forgot Password?</span>
     </div>  
 		<div class="form-group">
-      <button type="button" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)" class="btn btn-success btn-lg btn-block">Sign In</button>
+      <button type="button" value="Log in" (click)="authService.SignIn(userName.value, userPassword.value)" class="btn btn-lg btn-block">Sign In</button>
     </div>
     </div>
     </form>
 	<div class="text-center">Don't have an account? <a routerLink="/register-user">Sign up</a></div>
-</div>
 </div>

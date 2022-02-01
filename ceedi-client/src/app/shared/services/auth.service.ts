@@ -2,7 +2,7 @@ import { Injectable, NgZone } from '@angular/core';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Router } from "@angular/router";
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +33,43 @@ export class AuthService {
     }}
     )
   }
+//   let request = new XMLHttpRequest();
+
+// request.open('POST', "https://api.openrouteservice.org/v2/matrix/driving-car");
+
+// request.setRequestHeader('Accept', 'application/json, application/geo+json, application/gpx+xml, img/png; charset=utf-8');
+// request.setRequestHeader('Content-Type', 'application/json');
+// request.setRequestHeader('Authorization', '5b3ce3597851110001cf624880d3b58c2b084f43b62d26afb09918a4');
+
+// request.onreadystatechange = function () {
+//   if (this.readyState === 4) {
+//     console.log('Status:', this.status);
+//     console.log('Headers:', this.getAllResponseHeaders());
+//     console.log('Body:', this.responseText);
+//   }
+// };
+
+// const body = '{"locations":[[9.70093,48.477473],[9.207916,49.153868]]}';
+
+// request.send(body);
+   distance(latitude:any,longitude:any){
+    let headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization':'5b3ce3597851110001cf624880d3b58c2b084f43b62d26afb09918a4' });
+      let options = { headers: headers };
+     return this.http.post<any>("https://api.openrouteservice.org/v2/matrix/driving-car",
+     {"locations":[[9.70093,48.477473],[latitude,longitude]],"metrics":["distance","duration"],"units":"km"},
+              options
+              )
+              .toPromise()
+   }
   url="http://127.0.0.1:8000";
+  getcurrentuser(){
+    this.afAuth.currentUser.then(resp=>{
+      console.log("afauth",resp)
+      return resp;
+    })
+  }
   getUserType(email:string){
     this.afAuth.currentUser.then(u=>{
       u?.getIdToken().then(token=>{
@@ -41,7 +77,8 @@ export class AuthService {
           localStorage.setItem('userType',resp);
           console.log(localStorage.getItem('userType'))
           this.ngZone.run(() => {
-            this.router.navigate(['']);
+            if(resp=="MANAGER")this.router.navigate(['']);
+            else this.router.navigate(['admin'])
           });
         })
       })
@@ -54,7 +91,8 @@ export class AuthService {
           localStorage.setItem('userType',userType);
           console.log(localStorage.getItem('userType'));
           this.ngZone.run(() => {
-            this.router.navigate(['']);
+            if(userType=="MANAGER")this.router.navigate(['']);
+            else this.router.navigate(['admin'])
           });
         })
       })
@@ -68,8 +106,8 @@ export class AuthService {
       image:image,
       title:name,
       description:description,
-      price:price,
-      quantity:quantity
+      price:Number(price),
+      quantity:Number(quantity)
     }}).toPromise()
     console.log(list)
   }
@@ -84,6 +122,29 @@ export class AuthService {
     var list=await this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
     return list
   }
+  async getAllRiders(){
+    // this.afAuth.currentUser.then(u=>{
+    //   u?.getIdToken().then(token=>{
+    //     return this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    //   })
+    // })
+    var u=await this.afAuth.currentUser
+    var token= await u?.getIdToken()
+    var list=await this.http.get<any>(this.url+`/api/riders/list/${token}`).toPromise()
+    return list
+  }
+  async getRiderHistory(rider:string){
+    // this.afAuth.currentUser.then(u=>{
+    //   u?.getIdToken().then(token=>{
+    //     return this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    //   })
+    // })
+    console.log(rider)
+    var u=await this.afAuth.currentUser
+    var token= await u?.getIdToken()
+    var list=await this.http.post<any>(this.url+`/api/riders/history/${token}`,{rid:rider}).toPromise()
+    return list
+  }
   async getAllOrders(){
     // this.afAuth.currentUser.then(u=>{
     //   u?.getIdToken().then(token=>{
@@ -92,7 +153,7 @@ export class AuthService {
     // })
     var u=await this.afAuth.currentUser
     var token= await u?.getIdToken()
-    var list=await this.http.get<any>(this.url+`/api/products/list/${token}`).toPromise()
+    var list=await this.http.get<any>(this.url+`/api/orders/list/${token}`).toPromise()
     return list
   }
   async editProduct(name:any,field:any,value:any){

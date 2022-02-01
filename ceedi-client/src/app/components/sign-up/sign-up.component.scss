@@ -3,6 +3,30 @@
 	background: #63738a;
 	font-family: 'Roboto', sans-serif;
 }
+.logo{
+	height: 50px;
+}
+
+.nav-color{
+	background-color: #FF7F3F !important;
+	color: #fff !important;
+}
+.nav-item{
+	color: #fff !important;
+}
+.nav-link {
+	font-size: 22px;
+	color: #fff !important;
+}
+.navbar-brand{
+	font-size: 30px;
+	font-style: bold;
+	color: #fff !important;
+}
+.btn{
+	background-color: #FF7F3F;
+	color: #fff;
+}
 .forgotPassword{
     cursor: pointer;
 }
@@ -77,7 +101,7 @@
 	padding-left: 10px;
 }    	
 .signup-form a {
-	color: #fff;
+	color: #FF7F3F;
 	text-decoration: underline;
 }
 .signup-form a:hover {
