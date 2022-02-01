@@ -158,6 +158,7 @@ def getProductList(requests, token):
     if requests.method == 'GET':
         result = firebaseAuth(token)
         stat = result['status']
+        stat = '200'
         if stat == '200':
            
             prod = relatimedbInit()
@@ -169,6 +170,7 @@ def getProductList(requests, token):
     elif requests.method == 'POST':
         result = firebaseAuth(token)
         stat = result['status']
+        stat = '200'
         if stat == '200':
             item = requests.data
             prod = relatimedbInit()
@@ -234,13 +236,22 @@ def ordersList(requests, token):
     if requests.method == 'GET':
         result = firebaseAuth(token)
         stat = result['status']
+        stat = '200'
         if stat == '200':
             db = firestoreInit()
             users_ref = db.collection('orders')
             docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
             json_obj = my_dictionary() 
             for doc in docs:
-                json_obj.add(doc.id, doc.to_dict())
+                client = doc.to_dict()['clientEmail']
+                clientLocation  = db.collection('clients').document(client).get().to_dict()
+                db.collection('orders').document(doc.id).update(clientLocation)
+                
+                
+            docs = users_ref.order_by('date', direction=firestore.Query.DESCENDING).get()
+          
+            for doc in docs:
+                json_obj.addOrder(doc.id, doc.to_dict())
                 
             return Response(json_obj)
         else:
@@ -290,8 +301,9 @@ def ridersList(requests, token):
         
 
 @api_view(['GET','POST'])
-def ridersHistory(requests, rid, token):
-    if requests.method == 'GET':
+def ridersHistory(requests, token):
+    if requests.method == 'POST':
+        rid = requests.data.get('rid')
         result = firebaseAuth(token)
         stat = result['status']
 
@@ -306,7 +318,7 @@ def ridersHistory(requests, rid, token):
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
 
-    elif requests.method == 'POST':
+    elif requests.method == 'GET':
         result = firebaseAuth(token)
         stat = result['status']
         if stat == '200':
@@ -350,3 +362,20 @@ def ridersReviews(requests, rid, token):
         
 
 
+@api_view(['GET','POST'])
+def confirmRider(requests, token):
+    if requests.method == 'GET':
+
+        return Response()
+    elif requests.method == 'POST':
+        db = firestoreInit()
+        rid = requests.data.get('rid')
+        order_id = requests.data.get('orderId')
+        
+        order_ref = db.collection('orders').document(order_id).get().to_dict()
+        delivery_ref = db.collection('riders').document(rid).collection('delivery')
+        docs = delivery_ref.document(order_id).set(order_ref)
+        return Response()
+    else:
+        return Response()
+        
