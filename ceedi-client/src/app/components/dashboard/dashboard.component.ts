@@ -26,6 +26,9 @@ export class DashboardComponent implements OnInit {
   hideForm:boolean=false;
   public toedit:any={};
  // editForm:FormGroup;
+ lat = 21.3069;
+ lng = -157.8583;
+ mapType = 'satellite';
   constructor(
     public authService: AuthService,
     public router: Router,
@@ -40,6 +43,15 @@ export class DashboardComponent implements OnInit {
   // }
   imgSrc:any=""
   selectedImage:any=null
+  showMap(latitude:any,longitude:any,content:any){
+    this.lat=latitude;
+    this.lng=longitude;
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title',size:'lg'}).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
   test(event:any){
     if(event.target.files && event.target.files[0])
     {
@@ -129,7 +141,9 @@ export class DashboardComponent implements OnInit {
       }
     })
     }
-    getAllRiders(){
+    order_id:any=""
+    getAllRiders(event:any){
+      this.order_id=event.target.id
       this.hideProducts=true;
         this.hideOrders=true;
         this.hideRiders=false;
@@ -147,6 +161,13 @@ export class DashboardComponent implements OnInit {
         this.setdistances()
       })
       
+      }
+      chooseRider(event:any){
+        let rider=event.target.id
+        this.authService.chooseRider(this.order_id,rider).then((resp)=>{
+          alert("riderChosen")
+          this.getAllOrders()
+        })
       }
       async setdistances(){
         console.log("function")

@@ -21,7 +21,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
 import { AdminComponent } from './admin/admin.component';
-  
+import { AgmCoreModule } from '@agm/core';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
@@ -44,7 +44,10 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     BrowserAnimationsModule,
     GridModule,
     NgbModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyCEYWDvXYIQLtIWniZUJYuxntBK_kTF5H0'
+    })
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

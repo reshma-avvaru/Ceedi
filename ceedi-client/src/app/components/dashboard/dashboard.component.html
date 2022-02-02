@@ -36,9 +36,9 @@
         <li class="nav-item">
           <a class="nav-link" (click)="getAllOrders()">Orders</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" (click)="getAllRiders()">Riders</a>
-        </li>
+        <!--<li class="nav-item">
+          <a class="nav-link" (click)="getAllRiders($event)">Riders</a>
+        </li>-->
         <li class="nav-item">
             <a class="nav-link" (click)="authService.SignOut()">
               <i class="fas fa-sign-out-alt"></i>Log out
@@ -107,7 +107,14 @@
     <tbody>
       <tr *ngFor="let o of orders" [ngClass]="{'bg-green': o.outcome === 'DELIVERED', 'bg-red': o.outcome === 'YET_TO_RESPOND'}">
         <td>{{o.date}}</td>
-        <td>{{o.clientEmail}} {{o.address.latitude}}  {{o.address.longitude}}</td>
+        <td>{{o.clientEmail}} 
+        <i class="icon" (click)="showMap(o.address.latitude,o.address.longitude, mapmodal)">
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        </i>
+        </td>
         <td>{{o.outcome}}</td>
         <td>{{o.payment}}</td>
         <td>{{o.total}}</td>
@@ -123,7 +130,7 @@
         </li>
         </ol>
         </td>
-        <td ><button class="btn" *ngIf="o.outcome=='YET_TO_RESPOND'||o.outcome=='REJECTED'" >Rider</button></td>
+        <td ><button id="{{o.date}}" (click)="getAllRiders($event)" class="btn" *ngIf="o.outcome=='YET_TO_RESPOND'||o.outcome=='REJECTED'" >Rider</button></td>
       </tr>
     </tbody>
   </table>
@@ -131,22 +138,34 @@
     <thead>
       <tr>
         <th scope="col">Name</th>
-        <th scope="col">Status</th>
         <th scope="col">Distance</th>
-        <th scope="col">Distance</th>
+        <th scope="col">Time</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let r of riders">
         <td>{{r.rider}}</td>
-        <td>{{r.prop.riderStatus}}</td>
         <td>{{r.prop.distance}} <span *ngIf="r.prop.distance!='None'">km</span></td>
         <td>{{r.prop.time}} <span *ngIf="r.prop.time!='None'">Min</span></td>
+        <td><button id="{{r.rider}}" (click)="chooseRider($event)" class="btn btn-sm">Choose</button></td>
       </tr>
     </tbody>
   </table>
 </div>
-
+<ng-template  #mapmodal let-modal>
+  <div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Client Location</h4>
+  <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">x</button>
+  </div>
+  <div class="modal-body">
+  <agm-map
+      [latitude]="lat"
+      [longitude]="lng"
+      [mapTypeId]="mapType"
+    >
+    </agm-map>
+  </div>
+</ng-template>
 <!--<button class="btn btn-primary" (click)="authService.distance()">id</button>-->
 <ng-template #mymodal let-modal>
   <div class="modal-header">
