@@ -365,16 +365,26 @@ def ridersReviews(requests, rid, token):
 @api_view(['GET','POST'])
 def confirmRider(requests, token):
     if requests.method == 'GET':
-
-        return Response()
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':
+            return Response('Confirm Rider')
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN)
+            
     elif requests.method == 'POST':
-        db = firestoreInit()
-        rid = requests.data.get('rid')
-        order_id = requests.data.get('orderId')
-        
-        order_ref = db.collection('orders').document(order_id).get().to_dict()
-        delivery_ref = db.collection('riders').document(rid).collection('delivery')
-        docs = delivery_ref.document(order_id).set(order_ref)
-        return Response()
+        result = firebaseAuth(token)
+        stat = result['status']
+        if stat == '200':           
+            db = firestoreInit()
+            rid = requests.data.get('riderId')
+            order_id = requests.data.get('orderId')
+            
+            order_ref = db.collection('orders').document(order_id).get().to_dict()
+            delivery_ref = db.collection('riders').document(rid).collection('delivery')
+            doc = delivery_ref.document(order_id).set(order_ref)
+            return Response('added')
+        else:
+            return Response(status = status.HTTP_403_FORBIDDEN) 
     else:
-      return Response()
+      return Response(status = status.HTTP_400_BAD_REQUEST )
