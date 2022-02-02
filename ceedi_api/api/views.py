@@ -385,7 +385,9 @@ def confirmRider(requests, token):
             db = firestoreInit()
             rid = requests.data.get('riderId')
             order_id = requests.data.get('orderId')
-            
+            db.collection('orders').document(order_id).update({
+                'outcome':'YET_TO_RESPOND_BY_RIDER'
+            })
             order_ref = db.collection('orders').document(order_id).get().to_dict()
             delivery_ref = db.collection('riders').document(rid).collection('delivery')
             doc = delivery_ref.document(order_id).set(order_ref)
