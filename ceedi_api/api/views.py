@@ -69,6 +69,12 @@ def apiOverview(request):
                 'URL':'riders/reviews/<rid>/<token>',
                 'GET':'get reviews of riders',
                 'POST':'',
+            },
+        'confirm-rider':
+            {
+                'URL': 'rider/confirm/<token>',
+                'GET': '',
+                'POST - {riderId,orderId}': 'sets order data to rider subcollection -delivery',
             }
         
     }
