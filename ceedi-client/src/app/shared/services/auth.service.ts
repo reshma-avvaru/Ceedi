@@ -53,12 +53,13 @@ export class AuthService {
 
 // request.send(body);
    distance(latitude:any,longitude:any){
+     console.log(longitude)
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization':'5b3ce3597851110001cf624880d3b58c2b084f43b62d26afb09918a4' });
       let options = { headers: headers };
-     return this.http.post<any>("https://api.openrouteservice.org/v2/matrix/driving-car",
-     {"locations":[[9.70093,48.477473],[latitude,longitude]],"metrics":["distance","duration"],"units":"km"},
+     return this.http.post<any>("https://api.openrouteservice.org/v2/matrix/cycling-regular",
+     {"locations":[[19.0792,47.8691],[latitude,longitude]],"metrics":["distance","duration"],"units":"km"},
               options
               )
               .toPromise()
