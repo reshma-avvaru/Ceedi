@@ -21,4 +21,5 @@ urlpatterns = [
     path('orders/list/<str:token>', views.ordersList, name = "orders-list"),
     path('riders/history/<str:token>', views.ridersHistory, name = "rider-history"),
     path('riders/reviews/<str:rid>/<str:token>', views.ridersReviews, name = "rider-review"),
+    path('rider/confirm/<str:token>' , views.confirmRider, name = "confirm-rider")
 ]
