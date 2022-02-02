@@ -15,8 +15,8 @@ class my_dictionary(dict):
         for key in value:
             if isinstance(value[key],firestore.GeoPoint):
                 
-                lat = value['location'].latitude
-                lon = value['location'].longitude
+                lat = value['riderPosition'].latitude
+                lon = value['riderPosition'].longitude
                 value[key] = {
                 'latitude':lat, 
                 'longitude':lon,

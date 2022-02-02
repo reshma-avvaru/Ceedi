@@ -107,7 +107,7 @@
     <tbody>
       <tr *ngFor="let o of orders" [ngClass]="{'bg-green': o.outcome === 'DELIVERED', 'bg-red': o.outcome === 'YET_TO_RESPOND'}">
         <td>{{o.date}}</td>
-        <td>{{o.clientEmail}}</td>
+        <td>{{o.clientEmail}} {{o.address.latitude}}  {{o.address.longitude}}</td>
         <td>{{o.outcome}}</td>
         <td>{{o.payment}}</td>
         <td>{{o.total}}</td>

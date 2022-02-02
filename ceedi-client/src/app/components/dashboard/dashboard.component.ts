@@ -151,11 +151,11 @@ export class DashboardComponent implements OnInit {
       async setdistances(){
         console.log("function")
         for(var i in this.riders){
-          if(this.riders[i].prop.location){
+          if(this.riders[i].prop.riderPosition){
             console.log("found")
-            let resp =await this.authService.distance(this.riders[i].prop.location.latitude,this.riders[i].prop.location.longitude)
+            let resp =await this.authService.distance(this.riders[i].prop.riderPosition.latitude,this.riders[i].prop.riderPosition.longitude)
             
-              console.log(resp)
+              console.log("distance",resp)
               // console.log(resp["distances"])
               // console.log(resp["distances"][0][1])
               this.riders[i].prop.distance=resp["distances"][0][1]
