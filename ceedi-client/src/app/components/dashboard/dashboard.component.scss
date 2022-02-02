@@ -2,6 +2,12 @@
     //background-color: aliceblue;
     margin: 20px;
 }
+.bg-green{
+	background-color: rgb(201, 238, 201);
+}
+.bg-red{
+	background-color: rgb(241, 171, 161);
+}
 .avatar{
     height: 200px;
     width:200px;
@@ -21,6 +27,9 @@
 	font-size: 30px;
 	font-style: bold;
 	color: #fff !important;
+}
+i{
+	font-size: 20px;
 }
 .container{
 	color: #fff;

@@ -24,10 +24,7 @@
 </div>-->
 <div class="">
   <nav class="navbar navbar-expand-lg navbar-light nav-color p-3">
-    <a class="navbar-brand">Ceedi</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <a class="navbar-brand">Ceedi<i> manager</i></a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item active">
@@ -40,7 +37,7 @@
           <a class="nav-link" (click)="getAllOrders()">Orders</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link"(click)="getAllRiders()">Riders</a>
+          <a class="nav-link" (click)="getAllRiders()">Riders</a>
         </li>
         <li class="nav-item">
             <a class="nav-link" (click)="authService.SignOut()">
@@ -56,7 +53,7 @@
       <div>
       <h2>New Item</h2>
       <div class="form-group">
-        <input type="file" class="form-control" name="image" required="required" #image required>
+        <input type="file" accept="image/*" class="form-control" name="image" required="required" #image required (change)="test($event)">
       </div>
       <div class="form-group">
         <input type="text" class="form-control" name="title" placeholder="Product name" required="required" #title required>
@@ -71,7 +68,7 @@
         <input type="number" class="form-control" name="quantity" placeholder="quantity" required="required" #quantity required>
       </div>
       <div class="form-group">
-        <button type="button" (click)="this.authService.addnewproduct(image.value,title.value,desc.value,price.value,quantity.value)"  class="btn btn-lg btn-block">Add</button>
+        <button type="button" (click)="addNewProduct(title.value,desc.value,price.value,quantity.value)"  class="btn btn-lg btn-block">Add</button>
       </div>
       </div>
       </form>
@@ -88,7 +85,7 @@
     </thead>
     <tbody>
       <tr *ngFor="let p of products">
-        <th scope="row"><img class="img-thumbnail rounded avatar" src="{{p.image}}"></th>
+        <th scope="row "><img class="img-thumbnail rounded avatar" src="{{p.image}}"></th>
         <td>{{p.title}}</td>
         <td>{{p.price}}</td>
         <td>{{p.quantity}}</td>
@@ -96,7 +93,7 @@
       </tr>
     </tbody>
   </table>
-  <table [hidden]="hideOrders" class="table bg-light ">
+  <table [hidden]="hideOrders" class="table">
     <thead>
       <tr>
         <th scope="col">Date</th>
@@ -108,7 +105,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let o of orders">
+      <tr *ngFor="let o of orders" [ngClass]="{'bg-green': o.outcome === 'DELIVERED', 'bg-red': o.outcome === 'YET_TO_RESPOND'}">
         <td>{{o.date}}</td>
         <td>{{o.clientEmail}}</td>
         <td>{{o.outcome}}</td>
@@ -126,6 +123,7 @@
         </li>
         </ol>
         </td>
+        <td ><button class="btn" *ngIf="o.outcome=='YET_TO_RESPOND'||o.outcome=='REJECTED'" >Rider</button></td>
       </tr>
     </tbody>
   </table>

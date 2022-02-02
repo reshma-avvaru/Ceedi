@@ -16,6 +16,7 @@ import { VerifyEmailComponent } from './components/verify-email/verify-email.com
 // Auth service
 import { AuthService } from "./shared/services/auth.service";
 
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GridModule } from '@syncfusion/ej2-angular-grids';
@@ -42,7 +43,8 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     BrowserAnimationsModule,
     GridModule,
-    NgbModule
+    NgbModule,
+    AngularFireStorageModule
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

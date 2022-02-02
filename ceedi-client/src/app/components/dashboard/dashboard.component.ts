@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 import {NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 // import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { formatDate } from '@angular/common';
+import { finalize } from 'rxjs/operators'
+import { AngularFireStorage } from '@angular/fire/storage';
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -30,15 +32,36 @@ export class DashboardComponent implements OnInit {
     public ngZone: NgZone,
     public afAuth: AngularFireAuth,
     private modalService: NgbModal,
-    // private formBuilder: FormBuilder,
+    private storage:AngularFireStorage
   ) { 
-    // this.editForm = this.formBuilder.group({
-    //   title: [this.toedit.title, Validators.required],
-    //   image: [this.toedit.image, Validators.required],
-    //   price:[this.toedit.price,Validators.required],
-    //   quantity:[this.toedit.quantity,Validators.required],
-    // });
-
+  }
+  // getImage(event:any){
+  //   if(event.target.files && event.target.)
+  // }
+  imgSrc:any=""
+  selectedImage:any=null
+  test(event:any){
+    if(event.target.files && event.target.files[0])
+    {
+      console.log(event.target.files[0])
+    const reader=new FileReader();
+    reader.onload=(e:any)=>{ this.imgSrc=e.target.result}
+    reader.readAsDataURL(event.target.files[0])
+    this.selectedImage=event.target.files[0]
+  }
+  }
+  addNewProduct(title:any,desc:any,price:any,quantity:any){
+   var filePath=`productImages/${this.selectedImage.name}_${new Date().getTime()}`
+   const fileRef=this.storage.ref(filePath)
+   this.storage.upload(filePath,this.selectedImage).snapshotChanges().pipe(
+    finalize(()=>{
+      fileRef.getDownloadURL().subscribe(url=>{
+        this.authService.addnewproduct(url,title,desc,price,quantity).then(()=>{
+          alert("New product added")
+        })
+      })
+    })
+   ).subscribe();
   }
   closeResult: string = '';
     async onSubmit(title:any,desc:any,price:any,quant:any){
@@ -74,9 +97,6 @@ export class DashboardComponent implements OnInit {
     this.user=JSON.parse(localStorage.getItem('user')||'')
     console.log(this.user)
   }
-  // ngDoCheck(){
-  //   this.getAllProducts()
-  // }
   getAllProducts(){
     this.hideProducts=false;
         this.hideOrders=true;
@@ -121,7 +141,7 @@ export class DashboardComponent implements OnInit {
         {
           resp[i]["distance"]="None"
           resp[i]["time"]="None"
-          this.riders.push({rider:i,prop:resp[i]});
+          if(resp[i].riderStatus)this.riders.push({rider:i,prop:resp[i]});
           console.log(resp[i])
         }
         this.setdistances()
