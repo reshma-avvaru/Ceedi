@@ -176,7 +176,7 @@ def getProductList(requests, token):
                 item = key
                 data = requests.data.get(item)
                 print(data)
-                prod.child(data.title).set(data)
+                prod.child(data['title']).set(data)
             return Response(prod.get())
         else:
             return Response(status = status.HTTP_403_FORBIDDEN)
