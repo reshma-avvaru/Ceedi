@@ -153,8 +153,8 @@ export class DashboardComponent implements OnInit {
         console.log(resp);
         for(var i in resp)
         {
-          resp[i]["distance"]="None"
-          resp[i]["time"]="None"
+          resp[i]["distance"]="can not reach"
+          resp[i]["time"]="can not reach"
           if(resp[i].riderStatus)this.riders.push({rider:i,prop:resp[i]});
           console.log(resp[i])
         }
@@ -179,9 +179,12 @@ export class DashboardComponent implements OnInit {
               console.log("distance",resp)
               // console.log(resp["distances"])
               // console.log(resp["distances"][0][1])
-              this.riders[i].prop.distance=resp["distances"][0][1]
-              this.riders[i].prop.time=Math.ceil(resp["durations"][0][1]/60)
-            
+              
+              if(resp["distances"][0][1])
+              {
+                this.riders[i].prop.distance=resp["distances"][0][1]
+                this.riders[i].prop.time=Math.ceil(resp["durations"][0][1]/60)
+              }
           }
         }
       }

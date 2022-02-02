@@ -145,8 +145,8 @@
     <tbody>
       <tr *ngFor="let r of riders">
         <td>{{r.rider}}</td>
-        <td>{{r.prop.distance}} <span *ngIf="r.prop.distance!='None'">km</span></td>
-        <td>{{r.prop.time}} <span *ngIf="r.prop.time!='None'">Min</span></td>
+        <td>{{r.prop.distance}} <span *ngIf="r.prop.distance!='can not reach'">km</span></td>
+        <td>{{r.prop.time}} <span *ngIf="r.prop.time!='can not reach'">Min</span></td>
         <td><button id="{{r.rider}}" (click)="chooseRider($event)" class="btn btn-sm">Choose</button></td>
       </tr>
     </tbody>
