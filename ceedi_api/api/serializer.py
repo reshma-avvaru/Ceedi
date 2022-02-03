@@ -37,7 +37,7 @@ class my_dictionary(dict):
                 'longitude':lon,
                 }    
                 g = geocoder.mapquest([lat, lon], method='reverse', key = 'QxCpYNilIEQbPoMTG3X5FqjoqqBzGuFG')
-                print(g.json)
+               
             
         self[keyid] = value        
     
